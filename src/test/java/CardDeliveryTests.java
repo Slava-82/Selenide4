@@ -32,7 +32,6 @@ public class CardDeliveryTests {
         $("[data-test-id='notification'] .notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(15))
                 .shouldHave(Condition.visible.exactText("Встреча успешно забронирована на " + meetingDate));
-
     }
 
     @Test
@@ -51,7 +50,6 @@ public class CardDeliveryTests {
         $("[data-test-id='notification'] .notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(15))
                 .shouldHave(Condition.visible.exactText("Встреча успешно забронирована на " + meetingDate));
-
     }
 
     @Test
@@ -68,8 +66,26 @@ public class CardDeliveryTests {
         $(".button.button_view_extra.button_size_m.button_theme_alfa-on-white").click();
         $(".input__sub").shouldBe(visible)
                 .shouldHave(Condition.visible.exactText("Доставка в выбранный город недоступна"));
-
     }
+
+    @Test
+    public void shouldTestNameЁ() {
+
+        open("http://localhost:9999");
+        $("[data-test-id='city'] input").setValue("Краснодар");
+        $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+        String meetingDate = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        $("[data-test-id='date'] input").setValue(meetingDate);
+        $("[data-test-id='name'] input").setValue("Ивлев Пётр");
+        $("[data-test-id='phone'] input").setValue("+79001234567");
+        $("[data-test-id='agreement']").click();
+        $(".button.button_view_extra.button_size_m.button_theme_alfa-on-white").click();
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id='notification'] .notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.visible.exactText("Встреча успешно забронирована на " + meetingDate));
+    }
+
     @Test
     public void shouldTestNameLatin() {
 
